@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFtest"
         mc:Ignorable="d"
-        Title="Bluestone WiFi Tool" Height="280.4" Width="400.8" ResizeMode="NoResize">
+        Title="Bluestone WiFi Tool V0.51" Height="280.4" Width="400.8" ResizeMode="NoResize">
     <Window.Resources>
         <SolidColorBrush x:Key="Brush1" Color="White"/>
     </Window.Resources>
@@ -16,22 +16,25 @@
             <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="buttonRun" Content="Run" HorizontalAlignment="Center" Margin="306,216,2.2,0" VerticalAlignment="Top" Width="75" Click="buttonRun_Click" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="TInput" Grid.Column="0" HorizontalAlignment="Center" Height="23" Margin="10,31,176.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" MaxLength="2" ToolTip="Enter the desired IP address" MaxLines="1"/>
+        <TextBox x:Name="TInput" Grid.Column="0" HorizontalAlignment="Center" Height="23" Margin="10,31,176.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" MaxLength="2" ToolTip="Enter the desired IP address" MaxLines="1" Text="0"/>
         <TextBlock x:Name="MTitle" Grid.Column="0" Margin="10,10,10.4,0" TextWrapping="Wrap" Text="Enter the BSL Terminal Number" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Width="286"/>
         <Button x:Name="buttonSettings" Content="&#x2699;" HorizontalAlignment="Center" Margin="10,205,266.4,0" VerticalAlignment="Top" Width="28" Click="buttonSettings_Click" Height="28"/>
-        <CheckBox Grid.Column="1" Content="WiFi" HorizontalAlignment="Left" Margin="9.8,185,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+        <CheckBox x:Name="LWifi" Grid.Column="1" Content="WiFi" HorizontalAlignment="Left" Margin="9.8,185,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
         <GroupBox x:Name="AdvGroup" Header="" HorizontalAlignment="Left" Height="178" Margin="11,22,0,0" VerticalAlignment="Top" Width="285" RenderTransformOrigin="-0.422,-0.342" Background="{DynamicResource Brush1}" BorderBrush="{DynamicResource Brush1}" Visibility="Hidden">
             <Grid HorizontalAlignment="Left" Margin="0,0,-0.2,-12.8" VerticalAlignment="Top" Width="273" Height="168">
-                <TextBox x:Name="IPInput1"  HorizontalAlignment="Center" Height="23" Margin="0,0,228,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113"/>
-                <TextBox x:Name="IPInput2"  HorizontalAlignment="Center" Height="23" Margin="58,0,170,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113"/>
-                <TextBox x:Name="IPInput3"  HorizontalAlignment="Center" Height="23" Margin="116,0,112,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113"/>
+                <TextBox x:Name="IPInput1"  HorizontalAlignment="Center" Height="23" Margin="0,0,228,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113" Text="192"/>
+                <TextBox x:Name="IPInput2"  HorizontalAlignment="Center" Height="23" Margin="58,0,170,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113" Text="168"/>
+                <TextBox x:Name="IPInput3"  HorizontalAlignment="Center" Height="23" Margin="116,0,112,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113" Text="5"/>
                 <Label Content="." HorizontalAlignment="Left" Margin="45,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 <Label Content="." HorizontalAlignment="Left" Margin="103,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 <Label Content="." HorizontalAlignment="Left" Margin="161,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 <TextBox x:Name="IPInput4"  HorizontalAlignment="Center" Height="23" Margin="174,0,54,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113"/>
+                <TextBlock HorizontalAlignment="Left" Margin="0,28,0,0" TextWrapping="Wrap" Text="Select the Network Interface" VerticalAlignment="Top" RenderTransformOrigin="0.782,2.863" FontSize="16" FontWeight="Bold"/>
+                <ComboBox x:Name="IntPick" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top" Width="120"/>
 
             </Grid>
         </GroupBox>
+        <Button x:Name="buttonInfo" Content="?" HorizontalAlignment="Center" Margin="24.8,12,26.4,0" VerticalAlignment="Top" Width="28" Click="ButtonInfo_Click" Height="28" Grid.Column="1"/>
 
 
     </Grid>

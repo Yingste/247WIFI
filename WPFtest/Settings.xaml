@@ -5,11 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFtest"
         mc:Ignorable="d"
-        Title="Settings" Height="308.235" Width="400.588">
+        Title="Settings" Height="221.835" Width="762.188">
     <Grid>
-        <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="168" Margin="40,40,0,0" VerticalAlignment="Top" Width="278">
-            <TextBox HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        </GroupBox>
-
+        <TextBlock x:Name="COut" HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="192" Width="756"/>
     </Grid>
 </Window>

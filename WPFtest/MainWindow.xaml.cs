@@ -32,42 +32,74 @@ namespace WPFtest
     {
 
         bool AdvMode = false;
-        bool SetIsShow = false;
-        string oldT;
+        SettingsWin console = new SettingsWin();
 
-        public MainWindow()
+        
+
+
+
+    public MainWindow()
         {
             InitializeComponent();
-            
+
+            //Try to grab a list of the network adapters and put them into a list called result
+            string NetAdArg = "/C @echo off & for /F \"skip=3 tokens=3* \" %G in ('netsh interface show interface') do echo %H";
+            System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
+            pProcess.StartInfo.CreateNoWindow = true;
+            pProcess.StartInfo.FileName = "cmd.exe";
+            pProcess.StartInfo.Arguments = NetAdArg;
+            pProcess.StartInfo.UseShellExecute = false;
+            pProcess.StartInfo.RedirectStandardOutput = true;
+            pProcess.Start();
+            string strOutput = pProcess.StandardOutput.ReadToEnd();
+            pProcess.WaitForExit();
+            List<string> result = strOutput.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+
+            //Add the adapter to the dropdown list
+            for (int i = 0; i < result.Count; i++)
+            {
+                IntPick.Items.Add(result[i]);
+            }
+
+            IntPick.SelectedIndex = 0;
+
 
         }
+
+
+
 
 
         private void buttonRun_Click(object sender, RoutedEventArgs e)
 
         {
-            //string strCmdText;
-            //strCmdText = "-ExecutionPolicy Bypass -File 247admin.ps1";
-            //System.Diagnostics.Process.Start("Powershell.exe", strCmdText);
+            
             var environmentPath = Directory.GetCurrentDirectory();//System.Environment.GetEnvironmentVariable("PATH");
             
-            int termNum = int.Parse(TInput.Text) + 70;
-            String AdapName = "\"Wi - Fi\"";
+            int termNum = 0;
+            //String AdapName = "\"Wi - Fi\"";
+            String AdapName = "\"" + IntPick.Text + "\"";
             String arg1 = "";
             if(!AdvMode)
             {
-                arg1 = "/C netsh interface ip set address " + AdapName + " static 192.168.5." + termNum + " 255.255.255.0 192.168.5.1 1  ";
+                termNum = int.Parse(TInput.Text) + 70;
+                arg1 = "/C netsh interface ip set address " + AdapName + " static 192.168.5." + termNum + "  255.255.255.0  192.168.5.1  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no";
             }
             else
             {
-                string CIP = IPInput1 + "." + IPInput2 + "." + IPInput3 + "." + IPInput4;
-                string GIP = IPInput1 + "." + IPInput2 + "." + IPInput3 + ".1";
-                arg1 = "/C netsh interface ip set address " + AdapName + " static " + CIP + " 255.255.255.0 192.168.5.1 1  ";
+                string CIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + "." + IPInput4.Text;
+                string GIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + ".1";
+                arg1 = "/K netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  192.168.5.1  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no ";
-                arg1 += "& CD /D " + environmentPath + " & netsh wlan add profile filename=\"Tools\\ConInfo.xml\"";
+                
             }
             
+            if((bool)LWifi.IsChecked)
+            {
+                arg1 += "& CD /D " + environmentPath + " & netsh wlan add profile filename=\"Tools\\ConInfo.xml\"";
+            }
+
             System.Diagnostics.ProcessStartInfo myProcessInfo = new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "cmd.exe", 
@@ -75,22 +107,18 @@ namespace WPFtest
                 Arguments = arg1, 
                 Verb = "runas" //The process should start with elevated permissions
             };
-            
-
             System.Diagnostics.Process.Start(myProcessInfo); 
 
 
-            System.Diagnostics.ProcessStartInfo myProcessInfo2 = new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = /*Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\*/"cmd.exe", //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-                //Arguments = " /C Powershell.exe -ExecutionPolicy Bypass -File 247admin.ps1", //Sets the arguments to cd..
-                UseShellExecute = true,
-                Arguments = "/C CD /D " + environmentPath + " & netsh wlan add profile filename=\"Tools\\ConInfo.xml\"",
-                Verb = "runas" //The process should start with elevated permissions
-            }; 
-            System.Diagnostics.Process.Start(myProcessInfo2); 
+            
 
 
+            
+
+            //debuging window
+            //console.Show();
+            //console.COut.Text = arg1;
+            //console.COut.Text = strOutput;
 
         }
 
@@ -99,18 +127,17 @@ namespace WPFtest
         private void buttonSettings_Click(object sender, RoutedEventArgs e)
 
         {
-            
-            
-                setAdv();
-           
-
+            SetAdv();
         }
 
-        private void setAdv()
+        private void SetAdv()
         {
             AdvMode = !AdvMode;
             if (AdvMode)
             {
+                
+
+
                 MTitle.Text = "Enter IP Address of Terminal";
                 AdvGroup.Visibility = Visibility.Visible;
                 
@@ -127,6 +154,14 @@ namespace WPFtest
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
+
+        }
+
+        private void ButtonInfo_Click(object sender, RoutedEventArgs e)
+        {
+            //Show the info Window
+            WinInfo info = new WinInfo();
+            info.Show();
 
         }
     }

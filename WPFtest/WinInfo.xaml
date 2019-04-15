@@ -1,0 +1,13 @@
+﻿<Window x:Name="WinInfo2" x:Class="WPFtest.WinInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFtest"
+        mc:Ignorable="d"
+        Title="Bluestone Info" Height="341.176" Width="524.706" ResizeMode="NoResize">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="291" Width="498"><Run Text="Bluestone Lane Network Configuration Guide:"/><LineBreak/><Run/><LineBreak/><Run Text="&#x9;A Bluestone site will generally use the following IP Scheme"/><LineBreak/><Run Text="&#x9;&#x9;Gateway&#x9; - "/><Run Text="192.168.5.1"/><LineBreak/><Run Text="&#x9;&#x9;Term1&#x9; - "/><Run Text="192.168.5.71"/><LineBreak/><Run Text="&#x9;&#x9;Printer1&#x9; - 192.168.5.151"/><LineBreak/><Run Text="&#x9;&#x9;Terms run from .71-.85 and printers start at .151"/><LineBreak/><Run Text="&#x9;In simple mode all you have to do for a terminal is enter what number it is"/><LineBreak/><Run Text="&#x9;In advanced mode you have to input the IP manually"/><LineBreak/><Run Text="&#x9;&#x9;Advanced mode also lets you select the network interface"/><LineBreak/><Run/><LineBreak/><Run Text="&#x9;If you are loading a tablet for Bluestone make sure to check the WiFi box"/><LineBreak/><Run Text="&#x9;&#x9;This ensure that the Brinks WiFi profile is added"/><LineBreak/><Run Text="&#x9;"/><LineBreak/><LineBreak/><Run/><LineBreak/><Run Text="NOTE: WiFi can only be added if the tools folder is present in the same folder as the program"/><Run Text=" "/><LineBreak/><Run Text=""/><LineBreak/><Run/></TextBlock>
+
+    </Grid>
+</Window>
