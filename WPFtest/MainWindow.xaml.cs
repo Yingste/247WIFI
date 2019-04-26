@@ -23,20 +23,11 @@ namespace WPFtest
     /// </summary>
     /// 
 
-
-
-
-
-
     public partial class MainWindow : Window
     {
 
         bool AdvMode = false;
         SettingsWin console = new SettingsWin();
-
-        
-
-
 
     public MainWindow()
         {
@@ -60,15 +51,9 @@ namespace WPFtest
             {
                 IntPick.Items.Add(result[i]);
             }
-
             IntPick.SelectedIndex = 0;
 
-
         }
-
-
-
-
 
         private void buttonRun_Click(object sender, RoutedEventArgs e)
 
@@ -90,7 +75,7 @@ namespace WPFtest
             {
                 string CIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + "." + IPInput4.Text;
                 string GIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + ".1";
-                arg1 = "/K netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  192.168.5.1  1  ";
+                arg1 = "/C netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  192.168.5.1  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no ";
                 
             }
@@ -102,18 +87,14 @@ namespace WPFtest
 
             System.Diagnostics.ProcessStartInfo myProcessInfo = new System.Diagnostics.ProcessStartInfo
             {
-                FileName = "cmd.exe", 
+                FileName = "cmd.exe",
                 //Arguments = " /C Powershell.exe -ExecutionPolicy Bypass -File 247admin.ps1", 
+                CreateNoWindow = true,
                 Arguments = arg1, 
                 Verb = "runas" //The process should start with elevated permissions
             };
+            myProcessInfo.CreateNoWindow = true;
             System.Diagnostics.Process.Start(myProcessInfo); 
-
-
-            
-
-
-            
 
             //debuging window
             //console.Show();
@@ -121,8 +102,6 @@ namespace WPFtest
             //console.COut.Text = strOutput;
 
         }
-
-
 
         private void buttonSettings_Click(object sender, RoutedEventArgs e)
 
@@ -135,26 +114,14 @@ namespace WPFtest
             AdvMode = !AdvMode;
             if (AdvMode)
             {
-                
-
-
                 MTitle.Text = "Enter IP Address of Terminal";
                 AdvGroup.Visibility = Visibility.Visible;
-                
             }
             else
             {
                 MTitle.Text = "Enter the BSL Terminal Number";
                 AdvGroup.Visibility = Visibility.Hidden;
-                
             }
-
-
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void ButtonInfo_Click(object sender, RoutedEventArgs e)
@@ -162,7 +129,6 @@ namespace WPFtest
             //Show the info Window
             WinInfo info = new WinInfo();
             info.Show();
-
         }
     }
 }
