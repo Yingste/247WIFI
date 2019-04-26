@@ -19,7 +19,7 @@
         <TextBox x:Name="TInput" Grid.Column="0" HorizontalAlignment="Center" Height="23" Margin="10,31,176.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" MaxLength="2" ToolTip="Enter the desired IP address" MaxLines="1" Text="0"/>
         <TextBlock x:Name="MTitle" Grid.Column="0" Margin="10,10,10.4,0" TextWrapping="Wrap" Text="Enter the BSL Terminal Number" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Width="286"/>
         <Button x:Name="buttonSettings" Content="&#x2699;" HorizontalAlignment="Center" Margin="10,205,266.4,0" VerticalAlignment="Top" Width="28" Click="buttonSettings_Click" Height="28"/>
-        <CheckBox x:Name="LWifi" Grid.Column="1" Content="WiFi" HorizontalAlignment="Left" Margin="9.8,185,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+        <CheckBox x:Name="LWifi" Grid.Column="1" Content="WiFi" HorizontalAlignment="Left" Margin="9.8,185,0,0" VerticalAlignment="Top" />
         <GroupBox x:Name="AdvGroup" Header="" HorizontalAlignment="Left" Height="178" Margin="11,22,0,0" VerticalAlignment="Top" Width="285" RenderTransformOrigin="-0.422,-0.342" Background="{DynamicResource Brush1}" BorderBrush="{DynamicResource Brush1}" Visibility="Hidden">
             <Grid HorizontalAlignment="Left" Margin="0,0,-0.2,-12.8" VerticalAlignment="Top" Width="273" Height="168">
                 <TextBox x:Name="IPInput1"  HorizontalAlignment="Center" Height="23" Margin="0,0,228,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113" Text="192"/>
