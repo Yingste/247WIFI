@@ -50,6 +50,7 @@ namespace WPFtest
             for (int i = 0; i < result.Count; i++)
             {
                 IntPick.Items.Add(result[i]);
+                if (i == 1) { SetAdv(); }
             }
             IntPick.SelectedIndex = 0;
 
@@ -67,15 +68,23 @@ namespace WPFtest
             String arg1 = "";
             if(!AdvMode)
             {
-                termNum = int.Parse(TInput.Text) + 70;
+                int.TryParse(TInput.Text, out termNum);
+                termNum += 70;
+                if (termNum >= 255) { termNum = 37;}
+                //termNum = int.Parse(TInput.Text) + 70;
+                string GIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + ".1";
                 arg1 = "/C netsh interface ip set address " + AdapName + " static 192.168.5." + termNum + "  255.255.255.0  192.168.5.1  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no";
             }
             else
             {
+                if (IPInput1.Text == "") { IPInput1.Text = "192";}
+                if (IPInput2.Text == "") { IPInput2.Text = "168"; }
+                if (IPInput3.Text == "") { IPInput3.Text = "5"; }
+                if (IPInput4.Text == "") { IPInput4.Text = "37"; }
                 string CIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + "." + IPInput4.Text;
                 string GIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + ".1";
-                arg1 = "/C netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  192.168.5.1  1  ";
+                arg1 = "/C netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  " + GIP + "  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no ";
                 
             }
@@ -94,11 +103,11 @@ namespace WPFtest
                 Verb = "runas" //The process should start with elevated permissions
             };
             myProcessInfo.CreateNoWindow = true;
-            System.Diagnostics.Process.Start(myProcessInfo); 
+            //System.Diagnostics.Process.Start(myProcessInfo); 
 
             //debuging window
-            //console.Show();
-            //console.COut.Text = arg1;
+            console.Show();
+            console.COut.Text = "\n" + arg1;
             //console.COut.Text = strOutput;
 
         }
