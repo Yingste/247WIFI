@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFtest"
         mc:Ignorable="d"
-        Title="Bluestone Net Tool V0.5.0625" Height="280.4" Width="400.8" ResizeMode="NoResize">
+        Title="Bluestone Net Tool V0.6.0628" Height="282.533" Width="416.8" ResizeMode="NoResize">
     <Window.Resources>
         <SolidColorBrush x:Key="Brush1" Color="White"/>
     </Window.Resources>
@@ -21,7 +21,7 @@
         <TextBlock x:Name="MTitle" Grid.Column="0" Margin="14,10,15.2,0" TextWrapping="Wrap" Text="Enter the BSL Terminal Number" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Width="286" Grid.ColumnSpan="2"/>
         <Button x:Name="buttonSettings" Content="&#x2699;" HorizontalAlignment="Center" Margin="15,205,41.683,0" VerticalAlignment="Top" Width="28" Click="buttonSettings_Click" Height="28"/>
         <CheckBox x:Name="LWifi" Grid.Column="2" Content="WiFi" HorizontalAlignment="Left" Margin="9.8,185,0,0" VerticalAlignment="Top" />
-        <GroupBox x:Name="AdvGroup" Header="" HorizontalAlignment="Left" Height="178" Margin="11,22,0,0" VerticalAlignment="Top" Width="285" RenderTransformOrigin="-0.422,-0.342" Background="{DynamicResource Brush1}" BorderBrush="{DynamicResource Brush1}" Visibility="Hidden" Grid.ColumnSpan="2">
+        <GroupBox x:Name="AdvGroup" Header="" HorizontalAlignment="Left" Height="178" Margin="11,22,0,0" VerticalAlignment="Top" Width="285" RenderTransformOrigin="-0.422,-0.342" Background="{DynamicResource Brush1}" BorderBrush="{DynamicResource Brush1}" Grid.ColumnSpan="2" Visibility="Hidden">
             <Grid HorizontalAlignment="Left" Margin="0,0,-0.2,-12.8" VerticalAlignment="Top" Width="273" Height="168">
                 <TextBox x:Name="IPInput1"  HorizontalAlignment="Center" Height="23" Margin="0,0,228,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113" Text="192"/>
                 <TextBox x:Name="IPInput2"  HorizontalAlignment="Center" Height="23" Margin="58,0,170,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113" Text="168"/>
@@ -32,10 +32,14 @@
                 <TextBox x:Name="IPInput4"  HorizontalAlignment="Center" Height="23" Margin="174,0,54,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" MaxLength="3" ToolTip="Enter the desired IP address" MaxLines="1" RenderTransformOrigin="-0.431,2.113"/>
                 <TextBlock HorizontalAlignment="Left" Margin="0,28,0,0" TextWrapping="Wrap" Text="Select the Network Interface" VerticalAlignment="Top" RenderTransformOrigin="0.782,2.863" FontSize="16" FontWeight="Bold"/>
                 <ComboBox x:Name="IntPick" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top" Width="120"/>
+                <TextBlock HorizontalAlignment="Left" Margin="0,76,0,0" TextWrapping="Wrap" Text="Select the WIFI profile" VerticalAlignment="Top" RenderTransformOrigin="0.782,2.863" FontSize="16" FontWeight="Bold"/>
+                <ComboBox x:Name="WifiPick" HorizontalAlignment="Left" Margin="0,97,0,0" VerticalAlignment="Top" Width="120"/>
 
             </Grid>
         </GroupBox>
         <Button x:Name="buttonInfo" Content="?" HorizontalAlignment="Center" Margin="24.8,12,26.4,0" VerticalAlignment="Top" Width="28" Click="ButtonInfo_Click" Height="28" Grid.Column="2"/>
+        <CheckBox x:Name="CBDebug" Content="Debug" Grid.Column="1" HorizontalAlignment="Left" Margin="10.2,218,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="DHCP" Grid.Column="2" Content="DHCP" HorizontalAlignment="Left" Margin="9.8,150,0,0" VerticalAlignment="Top" />
 
 
     </Grid>

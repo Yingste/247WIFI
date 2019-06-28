@@ -25,7 +25,7 @@ namespace WPFtest
 
     public partial class MainWindow : Window
     {
-
+        
         bool AdvMode = false;
         SettingsWin console = new SettingsWin();
 
@@ -50,9 +50,40 @@ namespace WPFtest
             for (int i = 0; i < result.Count; i++)
             {
                 IntPick.Items.Add(result[i]);
-                if (i == 1) { SetAdv(); }
+                if (i == 2) { SetAdv(); }
             }
             IntPick.SelectedIndex = 0;
+
+
+
+            //Lets start grabbing a list of all connection profiles that we have
+            string tDir = Directory.GetCurrentDirectory() + "\\Tools";
+            string fOut = "";
+            string[] dir = Directory.GetFiles(tDir);//Grab the contents of the tools folder
+
+
+            //Cycle through each file in the dir
+            foreach(string file in dir)
+            {
+                //we only need the file name and not the full path
+                string[] aTemp = file.Split('\\');
+                string temp = "";
+                foreach (string a in aTemp)
+                {
+                    temp = a;
+                }
+
+                fOut += temp + "\n";
+                WifiPick.Items.Add(temp);//Add each file to the dropdown
+            }
+            WifiPick.SelectedIndex = 0;
+
+            //Debugging
+            //SettingsWin console3 = new SettingsWin();
+            //console3.Show();
+            //console3.COut.Text = "\n" + fOut;
+
+
 
         }
 
@@ -91,7 +122,18 @@ namespace WPFtest
             
             if((bool)LWifi.IsChecked)
             {
-                arg1 += "& CD /D " + environmentPath + " & netsh wlan add profile filename=\"Tools\\ConInfo.xml\"";
+                //Check to see if we should be loading an IP address or not
+                string wifiCmd = "CD /D " + environmentPath + " & netsh wlan add profile filename=\"Tools\\" + WifiPick.Text + "\\\"";
+                if(DHCP.IsChecked == false)
+                {
+                    arg1 += "& " + wifiCmd;
+                }
+                else
+                {
+                    //if no IP address is needed clear out or previous command queue 
+                    arg1 = "/C " + wifiCmd;
+                }
+                
             }
 
             System.Diagnostics.ProcessStartInfo myProcessInfo = new System.Diagnostics.ProcessStartInfo
@@ -103,11 +145,21 @@ namespace WPFtest
                 Verb = "runas" //The process should start with elevated permissions
             };
             myProcessInfo.CreateNoWindow = true;
-            //System.Diagnostics.Process.Start(myProcessInfo); 
+            
 
             //debuging window
-            console.Show();
-            console.COut.Text = "\n" + arg1;
+            //In debug mode do not run the script just display it in a new window
+            if(CBDebug.IsChecked == true)
+            {
+                SettingsWin console2 = new SettingsWin();
+                console2.Show();
+                console2.COut.Text = "\n" + arg1;
+            }
+            else//If not in debug mode run the script
+            {
+                System.Diagnostics.Process.Start(myProcessInfo);
+            }
+            
             //console.COut.Text = strOutput;
 
         }
