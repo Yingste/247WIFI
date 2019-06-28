@@ -46,21 +46,24 @@ namespace WPFtest
             pProcess.WaitForExit();
             List<string> result = strOutput.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
 
-            //Add the adapter to the dropdown list
-            for (int i = 0; i < result.Count; i++)
+            //iterate through the list, throw out blank and add them to the drop down
+            int numAdap = 0;
+            foreach(String a in result)
             {
-                IntPick.Items.Add(result[i]);
-                if (i == 2) { SetAdv(); }
+                numAdap++;
+                if(a != "")
+                {
+                    IntPick.Items.Add(a);
+                }
+                if (numAdap == 2) { SetAdv(); }
             }
             IntPick.SelectedIndex = 0;
-
 
 
             //Lets start grabbing a list of all connection profiles that we have
             string tDir = Directory.GetCurrentDirectory() + "\\Tools";
             string fOut = "";
             string[] dir = Directory.GetFiles(tDir);//Grab the contents of the tools folder
-
 
             //Cycle through each file in the dir
             foreach(string file in dir)
@@ -82,8 +85,6 @@ namespace WPFtest
             //SettingsWin console3 = new SettingsWin();
             //console3.Show();
             //console3.COut.Text = "\n" + fOut;
-
-
 
         }
 
@@ -109,10 +110,12 @@ namespace WPFtest
             }
             else
             {
+                //If any field is empty we will fill it in with part of the default IP
                 if (IPInput1.Text == "") { IPInput1.Text = "192";}
                 if (IPInput2.Text == "") { IPInput2.Text = "168"; }
                 if (IPInput3.Text == "") { IPInput3.Text = "5"; }
                 if (IPInput4.Text == "") { IPInput4.Text = "37"; }
+                //Compile the ip sub-parts into a single address
                 string CIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + "." + IPInput4.Text;
                 string GIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + ".1";
                 arg1 = "/C netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  " + GIP + "  1  ";
