@@ -27,8 +27,7 @@ namespace WPFtest
     {
         
         bool AdvMode = false;
-        SettingsWin console = new SettingsWin();
-
+        
     public MainWindow()
         {
             InitializeComponent();
@@ -85,7 +84,6 @@ namespace WPFtest
             //SettingsWin console3 = new SettingsWin();
             //console3.Show();
             //console3.COut.Text = "\n" + fOut;
-
         }
 
         private void buttonRun_Click(object sender, RoutedEventArgs e)
@@ -95,7 +93,6 @@ namespace WPFtest
             var environmentPath = Directory.GetCurrentDirectory();//System.Environment.GetEnvironmentVariable("PATH");
             
             int termNum = 0;
-            //String AdapName = "\"Wi - Fi\"";
             String AdapName = "\"" + IntPick.Text + "\"";
             String arg1 = "";
             if(!AdvMode)
@@ -104,7 +101,6 @@ namespace WPFtest
                 termNum += 70;
                 if (termNum >= 255) { termNum = 37;}
                 //termNum = int.Parse(TInput.Text) + 70;
-                string GIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + ".1";
                 arg1 = "/C netsh interface ip set address " + AdapName + " static 192.168.5." + termNum + "  255.255.255.0  192.168.5.1  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no";
             }
@@ -126,14 +122,14 @@ namespace WPFtest
             if((bool)LWifi.IsChecked)
             {
                 //Check to see if we should be loading an IP address or not
-                string wifiCmd = "CD /D " + environmentPath + " & netsh wlan add profile filename=\"Tools\\" + WifiPick.Text + "\\\"";
+                string wifiCmd = "CD /D " + environmentPath + " & netsh wlan add profile filename=\"Tools\\" + WifiPick.Text + "\"";
                 if(DHCP.IsChecked == false)
                 {
                     arg1 += "& " + wifiCmd;
                 }
                 else
                 {
-                    //if no IP address is needed clear out or previous command queue 
+                    //if no IP address is needed clear out our previous command queue 
                     arg1 = "/C " + wifiCmd;
                 }
                 
@@ -142,14 +138,11 @@ namespace WPFtest
             System.Diagnostics.ProcessStartInfo myProcessInfo = new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "cmd.exe",
-                //Arguments = " /C Powershell.exe -ExecutionPolicy Bypass -File 247admin.ps1", 
                 CreateNoWindow = true,
                 Arguments = arg1, 
                 Verb = "runas" //The process should start with elevated permissions
             };
-            myProcessInfo.CreateNoWindow = true;
             
-
             //debuging window
             //In debug mode do not run the script just display it in a new window
             if(CBDebug.IsChecked == true)
@@ -163,8 +156,6 @@ namespace WPFtest
                 System.Diagnostics.Process.Start(myProcessInfo);
             }
             
-            //console.COut.Text = strOutput;
-
         }
 
         private void buttonSettings_Click(object sender, RoutedEventArgs e)
