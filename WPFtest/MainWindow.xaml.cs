@@ -95,12 +95,18 @@ namespace WPFtest
             int termNum = 0;
             String AdapName = "\"" + IntPick.Text + "\"";
             String arg1 = "";
-            if(!AdvMode)
+            String arg3 = "";
+            String arg4 = "";
+            System.Diagnostics.Process Process1 = new System.Diagnostics.Process();
+            System.Diagnostics.Process Process2 = new System.Diagnostics.Process();
+            System.Diagnostics.Process Process3 = new System.Diagnostics.Process();
+            System.Diagnostics.Process Process4 = new System.Diagnostics.Process();
+            if (!AdvMode)
             {
                 int.TryParse(TInput.Text, out termNum);
                 termNum += 70;
                 if (termNum >= 255) { termNum = 37;}
-                //termNum = int.Parse(TInput.Text) + 70;
+                //termNum = int.Parse(TInput.Text) + 70;//Moved to safer way of try parse. Should prevent errors
                 arg1 = "/C netsh interface ip set address " + AdapName + " static 192.168.5." + termNum + "  255.255.255.0  192.168.5.1  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no";
             }
@@ -139,21 +145,72 @@ namespace WPFtest
             {
                 FileName = "cmd.exe",
                 CreateNoWindow = true,
-                Arguments = arg1, 
+                Arguments = arg1 + "& exit", 
                 Verb = "runas" //The process should start with elevated permissions
             };
-            
+
+            //need wifi connect command to process first
+            System.Diagnostics.ProcessStartInfo myProcessInfo2 = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                CreateNoWindow = true,
+                Arguments = "/c netsh wlan connect name=Brinks & netsh wlan connect name=Brinks & ping 127.0.0.1 -n 6 > nul" + "& exit",
+                Verb = "runas" //The process should start with elevated permissions
+            };
+            myProcessInfo2.CreateNoWindow = true;
+
+            //I need to check to see if we have internet after we run the tool
+            //General idea is that if no response from ping after 10 sec set to dhcp and reconnect to old wifi
+            //ping -n 1 192.168.1.1 | find "TTL=" >nul & if errorlevel 1 (netsh interface ip set address "adapName" dhcp) else (echo host reachable)
+            arg3 += "/c ping -n 1 8.8.8.8 | find \"TTL=\" >nul & if errorlevel 1 (netsh interface ip set address " + AdapName + " dhcp) else (echo host reachable)";
+            arg4 += "/c ping -n 1 8.8.8.8 | find \"TTL=\" >nul & if errorlevel 1 (netsh wlan delete profile name=Brinks & echo \"deleted\") else (echo host reachable)";
+
+
+            System.Diagnostics.ProcessStartInfo myProcessInfo3 = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                CreateNoWindow = true,
+                Arguments = arg3 + "& exit",
+                Verb = "runas" //The process should start with elevated permissions
+            };
+            myProcessInfo3.CreateNoWindow = true;
+            System.Diagnostics.ProcessStartInfo myProcessInfo4 = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                CreateNoWindow = true,
+                Arguments = arg4 + "& exit",
+                Verb = "runas" //The process should start with elevated permissions
+            };
+            myProcessInfo4.CreateNoWindow = true;
             //debuging window
             //In debug mode do not run the script just display it in a new window
-            if(CBDebug.IsChecked == true)
+            if (CBDebug.IsChecked == true)
             {
                 SettingsWin console2 = new SettingsWin();
                 console2.Show();
-                console2.COut.Text = "\n" + arg1;
+                console2.COut.Text = "\n" + arg3;
             }
             else//If not in debug mode run the script
             {
-                System.Diagnostics.Process.Start(myProcessInfo);
+                Process1.StartInfo = myProcessInfo;
+                Process1.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                Process1.Start();
+                Process1.WaitForExit();
+                //System.Diagnostics.Process.Start(myProcessInfo);//run the settings through
+                Process2.StartInfo = myProcessInfo2;
+                Process2.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                if ((bool)LWifi.IsChecked) { Process2.Start(); Process2.WaitForExit(); };//connec to the wifi
+
+                //System.Diagnostics.Process.Start(myProcessInfo);//check to make sure the con worked
+                Process3.StartInfo = myProcessInfo3;
+                Process3.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                Process3.Start();
+                Process3.WaitForExit();
+
+                Process4.StartInfo = myProcessInfo4;
+                Process4.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                Process4.Start();
+                Process4.WaitForExit();
             }
             
         }
