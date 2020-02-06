@@ -58,6 +58,17 @@ namespace WPFtest
             }
             IntPick.SelectedIndex = 0;
 
+            //Before we grab a list of files from the profiles directory lets make sure they are unblocked
+            string arg = "/C FOR /R %a in (*) do (echo.>%a:Zone.Identifier)";
+            System.Diagnostics.ProcessStartInfo cmdProcess = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                CreateNoWindow = true,
+                Arguments = arg,
+                Verb = "runas",
+            };
+            var p = System.Diagnostics.Process.Start(cmdProcess);
+            
 
             //Lets start grabbing a list of all connection profiles that we have
             string tDir = Directory.GetCurrentDirectory() + "\\Tools";
@@ -79,6 +90,8 @@ namespace WPFtest
                 WifiPick.Items.Add(temp);//Add each file to the dropdown
             }
             WifiPick.SelectedIndex = 0;
+
+            
 
             //Debugging
             //SettingsWin console3 = new SettingsWin();
@@ -120,7 +133,7 @@ namespace WPFtest
                 //Compile the ip sub-parts into a single address
                 string CIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + "." + IPInput4.Text;
                 string GIP = IPInput1.Text + "." + IPInput2.Text + "." + IPInput3.Text + ".1";
-                arg1 = "/C netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  " + GIP + "  1  ";
+                arg1 = "/K netsh interface ip set address " + AdapName + "  static  " + CIP + "  255.255.255.0  " + GIP + "  1  ";
                 arg1 += "& netsh interface ip add dns name=" + AdapName + " addr=1.1.1.1 validate=no & netsh interface ip add dns name=" + AdapName + " addr=8.8.8.8 index=2 validate=no ";
                 
             }
@@ -150,11 +163,12 @@ namespace WPFtest
             };
 
             //need wifi connect command to process first
+            //was playing too safe. I now do 4 con attempts and wait 10 seconds before moving onto the next 2 tests
             System.Diagnostics.ProcessStartInfo myProcessInfo2 = new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "cmd.exe",
                 CreateNoWindow = true,
-                Arguments = "/c netsh wlan connect name=Brinks & netsh wlan connect name=Brinks & ping 127.0.0.1 -n 6 > nul" + "& exit",
+                Arguments = "/c netsh wlan connect name=Brinks > test1.txt & netsh wlan connect name=Brinks & netsh wlan connect name=Brinks & netsh wlan connect name=Brinks > test2.txt & ping 127.0.0.1 -n 10 > nul" + "& exit",
                 Verb = "runas" //The process should start with elevated permissions
             };
             myProcessInfo2.CreateNoWindow = true;
@@ -162,8 +176,8 @@ namespace WPFtest
             //I need to check to see if we have internet after we run the tool
             //General idea is that if no response from ping after 10 sec set to dhcp and reconnect to old wifi
             //ping -n 1 192.168.1.1 | find "TTL=" >nul & if errorlevel 1 (netsh interface ip set address "adapName" dhcp) else (echo host reachable)
-            arg3 += "/c ping -n 1 8.8.8.8 | find \"TTL=\" >nul & if errorlevel 1 (netsh interface ip set address " + AdapName + " dhcp) else (echo host reachable)";
-            arg4 += "/c ping -n 1 8.8.8.8 | find \"TTL=\" >nul & if errorlevel 1 (netsh wlan delete profile name=Brinks & echo \"deleted\") else (echo host reachable)";
+            arg3 += "/c ping -n 1 8.8.8.8 | find \"TTL=\" >nul & if errorlevel 1 (netsh interface ip set address " + AdapName + " dhcp & ping 127.0.0.1 -n 2 > nul" + ") else (echo host reachable > test3.txt)";
+            arg4 += "/c ping -n 1 8.8.8.8 | find \"TTL=\" >nul & if errorlevel 1 (netsh wlan delete profile name=Brinks & echo \"deleted\") else (echo host reachable > test4.txt)";
 
 
             System.Diagnostics.ProcessStartInfo myProcessInfo3 = new System.Diagnostics.ProcessStartInfo
@@ -188,25 +202,29 @@ namespace WPFtest
             {
                 SettingsWin console2 = new SettingsWin();
                 console2.Show();
-                console2.COut.Text = "\n" + arg3;
+                console2.COut.Text = "\n" + arg1;
             }
             else//If not in debug mode run the script
             {
                 Process1.StartInfo = myProcessInfo;
-                Process1.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                //Process1.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 Process1.Start();
                 Process1.WaitForExit();
-                //System.Diagnostics.Process.Start(myProcessInfo);//run the settings through
+                //System.Diagnostics.Process.Start(myProcessInfo);//run the settings through//Why do I have this line? is this a dup?
+
+                //connect to the wifi and start the first round of diagnostics
                 Process2.StartInfo = myProcessInfo2;
                 Process2.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 if ((bool)LWifi.IsChecked) { Process2.Start(); Process2.WaitForExit(); };//connec to the wifi
 
+                //Runn diagnostic tests number 3 and reset to dhcp if needed
                 //System.Diagnostics.Process.Start(myProcessInfo);//check to make sure the con worked
                 Process3.StartInfo = myProcessInfo3;
                 Process3.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 Process3.Start();
                 Process3.WaitForExit();
 
+                //Run diagnostics test numner 4 and remove brinks wifi if needed
                 Process4.StartInfo = myProcessInfo4;
                 Process4.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 Process4.Start();
